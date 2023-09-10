@@ -22,12 +22,12 @@ public class Treads extends JPanel  implements Runnable {
     private ImageIcon manecillaHoras;
     private ImageIcon manecillaMinutos;
     private ImageIcon manecillaSegundos;
-
     ImageIcon misilmg ;
     Boolean Misil = true;
     boolean fondo1Activo = true;
     int animacionX = 0;
     Timer animacionTimer;
+    Clip Musicplay;
     public Treads() {
         calendario = Calendar.getInstance();
 
@@ -44,7 +44,7 @@ public class Treads extends JPanel  implements Runnable {
         caratulaReloj2 = new ImageIcon("C:\\Users\\angel\\Documents\\6M\\Imagen_2D_3D\\P1\\Proyecto_Primer_Parcial\\imagenes\\watch2.png");
 
         misilmg = new ImageIcon( "C:\\Users\\angel\\Documents\\6M\\Imagen_2D_3D\\P1\\Proyecto_Primer_Parcial\\imagenes\\disparo-removebg-preview.png");
-        playAudio("C:\\Users\\angel\\Documents\\6M\\Imagen_2D_3D\\P1\\Proyecto_Primer_Parcial\\imagenes\\Ekko vs Jinx - Dynasties & Dystopia ｜ Arcane MV.wav", estado);
+        playAudio("C:\\Users\\angel\\Documents\\6M\\Imagen_2D_3D\\P1\\Proyecto_Primer_Parcial\\imagenes\\Ekko vs Jinx - Dynasties & Dystopia ｜ Arcane MV.wav", true);
 
         Thread thread = new Thread(this);
         thread.start();
@@ -53,10 +53,17 @@ public class Treads extends JPanel  implements Runnable {
             @Override
             public void mouseClicked(MouseEvent e) {
                 fondo1Activo = !fondo1Activo;
+                estado =!estado;
+                if(estado){
+                    Musicplay.stop();
+                    playAudio("C:\\Users\\angel\\Documents\\6M\\Imagen_2D_3D\\P1\\Proyecto_Primer_Parcial\\imagenes\\Ekko vs Jinx - Dynasties & Dystopia ｜ Arcane MV.wav", true);
 
-                if(!fondo1Activo) {
-                    playAudio("C:\\Users\\angel\\Documents\\6M\\Imagen_2D_3D\\P1\\Proyecto_Primer_Parcial\\imagenes\\Awaken ｜ Season 2019 Cinematic - League of Legends (ft. Valerie Broussard).wav", estado);
+                }else {
+                    Musicplay.stop();
+
+                    playAudio("C:\\Users\\angel\\Documents\\6M\\Imagen_2D_3D\\P1\\Proyecto_Primer_Parcial\\imagenes\\Awaken ｜ Season 2019 Cinematic - League of Legends (ft. Valerie Broussard).wav", false);
                 }
+
                     repaint();
             }
         });
@@ -109,16 +116,27 @@ public class Treads extends JPanel  implements Runnable {
         g.drawImage(buffer, 0, 0, this);
     }
 
-    private static void playAudio(String audioFilePath, boolean estado) {
+    private  void playAudio(String audioFilePath, boolean estado) {
         try {
-            File audioFile1 = new File("ruta_cancion_1.wav");
-            File audioFile2 = new File("ruta_cancion_2.wav");
 
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File(audioFilePath));
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioStream);
-            clip.loop(Clip.LOOP_CONTINUOUSLY);
-            clip.start();
+            if(estado){
+                AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File(audioFilePath));
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioStream);
+                Musicplay = clip;
+                Musicplay.loop(Musicplay.LOOP_CONTINUOUSLY);
+                Musicplay.start();
+            }else {
+                Musicplay.stop();
+                AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File(audioFilePath));
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioStream);
+                Musicplay = clip;
+                Musicplay.loop(Musicplay.LOOP_CONTINUOUSLY);
+                Musicplay.start();
+            }
+
+
 
 
         } catch (Exception e) {
